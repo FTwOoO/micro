@@ -213,6 +213,20 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 		}
 	}
 
+	out = fmt.Sprintf(`
+      package %s
+      import (
+		"context"
+		"encoding/json"
+		"io/ioutil"
+		"io"
+		"net/http"
+	)`, pkg)
+	_, err = clientW.Write([]byte(out + "\n"))
+	if err != nil {
+		return
+	}
+
 	for serviceName, methoddefs := range methos {
 		out := templateText(RcpClientCommonTpl, map[string]interface{}{
 			"structName": serviceName + "Client",
