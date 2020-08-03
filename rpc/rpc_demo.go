@@ -10,4 +10,5 @@ type HelloResponse struct {
 }
 type DemoSevice interface {
 	Hello(context.Context, *HelloRequest) (*HelloResponse, error)
+	HelloNoReponse(context.Context, *HelloRequest) error
 }

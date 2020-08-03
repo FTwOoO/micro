@@ -131,9 +131,18 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 			reqName := params[1].Type.(*ast.StarExpr).X.(*ast.Ident).Name
 			results := method.Type.(*ast.FuncType).Results.List
 
-			respName := results[0].Type.(*ast.StarExpr).X.(*ast.Ident).Name
-			if _, ok := methos[ts.Name.Name]; !ok {
-				methos[ts.Name.Name] = []MethodDef{}
+			var respName = ""
+			if len(results) == 1 {
+				if v, ok := results[0].Type.(*ast.Ident); ok {
+					if v.Name == "error" {
+						respName = ""
+					}
+				}
+			} else {
+				respName = results[0].Type.(*ast.StarExpr).X.(*ast.Ident).Name
+				if _, ok := methos[ts.Name.Name]; !ok {
+					methos[ts.Name.Name] = []MethodDef{}
+				}
 			}
 
 			methos[ts.Name.Name] = append(methos[ts.Name.Name], MethodDef{
@@ -178,17 +187,27 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 		}
 
 		for _, method := range methoddefs {
-			out := templateText(httpRouteHandlerTpl, map[string]interface{}{
-				"serviceName":           camelCase(serviceName),
-				"httpMethodName":        fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
-				"rpcRequestStructName":  method.ReqName,
-				"rpcResponseStructName": method.RespName,
-				"rpcMethodName":         method.MethodName,
-			})
+			if method.RespName == "" {
+				out = templateText(httpRouteHandlerForNoRespTpl, map[string]interface{}{
+					"serviceName":          camelCase(serviceName),
+					"httpMethodName":       fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
+					"rpcRequestStructName": method.ReqName,
+					"rpcMethodName":        method.MethodName,
+				})
+			} else {
+				out = templateText(httpRouteHandlerTpl, map[string]interface{}{
+					"serviceName":           camelCase(serviceName),
+					"httpMethodName":        fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
+					"rpcRequestStructName":  method.ReqName,
+					"rpcResponseStructName": method.RespName,
+					"rpcMethodName":         method.MethodName,
+				})
+			}
+
 			serverW.Write([]byte(out + "\n"))
 		}
 
-		_, err = serverW.Write([]byte( "}\n"))
+		_, err = serverW.Write([]byte("}\n"))
 		if err != nil {
 			return
 		}
@@ -200,14 +219,24 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 		})
 		clientW.Write([]byte(out + "\n"))
 		for _, method := range methoddefs {
-			out := templateText(RpcClientMethodTpl, map[string]interface{}{
-				"serviceName":           camelCase(serviceName),
-				"structName":            serviceName + "Client",
-				"httpMethodName":        fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
-				"rpcRequestStructName":  method.ReqName,
-				"rpcResponseStructName": method.RespName,
-				"rpcMethodName":         method.MethodName,
-			})
+			if method.RespName == "" {
+				out = templateText(RpcClientMethodForNoRespTpl, map[string]interface{}{
+					"serviceName":          camelCase(serviceName),
+					"structName":           serviceName + "Client",
+					"httpMethodName":       fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
+					"rpcRequestStructName": method.ReqName,
+					"rpcMethodName":        method.MethodName,
+				})
+			} else {
+				out = templateText(RpcClientMethodTpl, map[string]interface{}{
+					"serviceName":           camelCase(serviceName),
+					"structName":            serviceName + "Client",
+					"httpMethodName":        fmt.Sprintf("/%s/%s", camelCase(serviceName), camelCase(method.MethodName)),
+					"rpcRequestStructName":  method.ReqName,
+					"rpcResponseStructName": method.RespName,
+					"rpcMethodName":         method.MethodName,
+				})
+			}
 			clientW.Write([]byte(out + "\n"))
 		}
 	}

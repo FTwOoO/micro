@@ -113,3 +113,9 @@ func (this *DemoSeviceClient) Hello(ctx context.Context, req *HelloRequest) (res
 	err = this.doPostJsonAndUnpackRespJson(url, nil, req, httpResp)
 	return
 }
+
+func (this *DemoSeviceClient) HelloNoReponse(ctx context.Context, req *HelloRequest) (err error) {
+	url := fmt.Sprintf("http://%s%s", this.endPoint, "/demoSevice/helloNoReponse")
+	_, err = this.doPostJSON(url, nil, req)
+	return
+}
