@@ -10,10 +10,11 @@ import (
 )
 
 func TestExpandStruct(t *testing.T) {
-	filename := "/Users/ganxiangle/Desktop/workspace/scheduler/core/run.go"
+	filename := "rpc_demo.go"
 	outfileNameServer := strings.TrimSuffix(filename, ".go") + ".server.go"
 	outfileNameClient := strings.TrimSuffix(filename, ".go") + ".client.go"
 
+	filename, _ = filepath.Abs(filename)
 	dirPath := filepath.Dir(filename)
 	_, packageName := filepath.Split(dirPath)
 

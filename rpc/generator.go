@@ -37,6 +37,7 @@ func camelCase(s string) string {
 }
 
 func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW io.Writer, clientW io.Writer) (err error) {
+
 	if src == nil {
 		src, err = ioutil.ReadFile(filename)
 		if err != nil {
@@ -216,11 +217,15 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 	out = fmt.Sprintf(`
       package %s
       import (
-		"context"
-		"encoding/json"
-		"io/ioutil"
-		"io"
-		"net/http"
+     "bytes"
+	"compress/gzip"
+	"context"
+	"encoding/json"
+	"fmt"
+	"io"
+	"io/ioutil"
+	"net/http"
+	"strings"
 	)`, pkg)
 	_, err = clientW.Write([]byte(out + "\n"))
 	if err != nil {

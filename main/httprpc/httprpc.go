@@ -16,6 +16,7 @@ func main() {
 	for _, filename := range filePaths {
 		outfileNameServer := strings.TrimSuffix(filename, ".go") + ".server.go"
 		outfileNameClient := strings.TrimSuffix(filename, ".go") + ".client.go"
+		filename, _ = filepath.Abs(filename)
 		dirPath := filepath.Dir(filename)
 		_, packageName := filepath.Split(dirPath)
 		fmt.Println("use package:" + packageName)
