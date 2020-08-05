@@ -35,7 +35,6 @@
   "MongoDB": {
     "Uri": "mongodb://admin:UEhVJ49RV5cbTyzU@127.0.0.1:27017",
     "Database": "spider"
-  },
-  "FanqiangSocksProxy": "socks5://127.0.0.1:11888"
+  }
 }
 
