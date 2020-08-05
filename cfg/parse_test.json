@@ -1,0 +1,41 @@
+{
+  "Name": "downloader",
+  "Version": "v1",
+  "LogLevel": "debug",
+  "Grpc": {
+    "Addr": "0.0.0.0:0"
+  },
+  "Http": {
+    "Addr": "0.0.0.0:0",
+    "Route": {
+      "Host": "api2.puhalive.com",
+      "PathPrefix": [
+        "/downloader"
+      ]
+    }
+  },
+  "Consul": {
+    "Addrs": [
+      "172.18.255.190:8500",
+      "172.18.255.192:8500",
+      "172.18.255.191:8500"
+    ]
+  },
+  "Redis": {
+    "Host": "127.0.0.1",
+    "Port": 6379,
+    "Password": ""
+  },
+  "Oss": {
+    "region": "oss-cn-hangzhou",
+    "key": "LTAI4FrRDund65X842q1JRQS",
+    "secret": "DDMuX8qQsGPmG6SObLFZE6DSGdCpZm",
+    "bucket": "puha"
+  },
+  "MongoDB": {
+    "Uri": "mongodb://admin:UEhVJ49RV5cbTyzU@127.0.0.1:27017",
+    "Database": "spider"
+  },
+  "FanqiangSocksProxy": "socks5://127.0.0.1:11888"
+}
+
