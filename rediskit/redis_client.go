@@ -3,14 +3,14 @@ package rediskit
 import (
 	"fmt"
 	"github.com/go-redis/redis"
-	"gitlab.livedev.shika2019.com/go/common/cfg"
-	"gitlab.livedev.shika2019.com/go/util/errorkit"
-	"gitlab.livedev.shika2019.com/go/util/logging"
+	"github.com/rexue2019/micro/cfg"
+	"github.com/rexue2019/util/errorkit"
+	"github.com/rexue2019/util/logging"
 )
 
 type RedisClient struct {
 	cfgRedis *cfg.RedisConfig
-	  *redis.Client
+	*redis.Client
 }
 
 func NewRedisClient(config *cfg.RedisConfig) *RedisClient {

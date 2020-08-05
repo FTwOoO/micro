@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"gitlab.livedev.shika2019.com/go/micro/rpc"
+	"github.com/rexue2019/micro/rpc"
 	"io/ioutil"
 	"os"
 	"os/exec"

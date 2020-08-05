@@ -3,10 +3,10 @@ package httpserver
 import (
 	"context"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
-	"gitlab.livedev.shika2019.com/go/common/cfg"
-	"gitlab.livedev.shika2019.com/go/util/errorkit"
-	"gitlab.livedev.shika2019.com/go/common/ip"
-	"gitlab.livedev.shika2019.com/go/util/logging"
+	"github.com/rexue2019/micro/cfg"
+	"github.com/rexue2019/micro/ip"
+	"github.com/rexue2019/util/errorkit"
+	"github.com/rexue2019/util/logging"
 	"go.uber.org/atomic"
 	"net"
 	"net/http"
@@ -15,10 +15,10 @@ import (
 )
 
 type HTTPServer struct {
-	server     *http.Server
-	httpConfig *cfg.HTTPConfig
-	start      atomic.Bool
-	listenAddr string
+	server        *http.Server
+	httpConfig    *cfg.HTTPConfig
+	start         atomic.Bool
+	listenAddr    string
 	handleConnect http.HandlerFunc
 }
 
@@ -56,7 +56,7 @@ func (this *HTTPServer) SetupConnectHandleFunc(f http.HandlerFunc) {
 	this.handleConnect = f
 }
 
-func (this * HTTPServer)  ServeHTTP(w http.ResponseWriter, req* http.Request) {
+func (this *HTTPServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "CONNECT" && this.handleConnect != nil {
 		this.handleConnect(w, req)
 	} else {
@@ -75,12 +75,12 @@ func (this *HTTPServer) Start() {
 		}
 		this.listenAddr =
 
-		ip.InternalIP()
-		_, port,  err := net.SplitHostPort(ln.Addr().String())
+			ip.InternalIP()
+		_, port, err := net.SplitHostPort(ln.Addr().String())
 		if err != nil {
 			panic(err)
 		}
-		this.listenAddr = ip.InternalIP()+":" + port
+		this.listenAddr = ip.InternalIP() + ":" + port
 
 		this.start.Store(true)
 		err = this.server.Serve(ln)
