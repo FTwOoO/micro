@@ -24,11 +24,9 @@ var (
 	GOPRIVATE             = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
 
 	HOSTS = map[string][]Vps{
-		"prod2": {
-			{"120.24.71.80", 10002, "root"},
-		},
-		"prod3": {
-			{"120.24.79.207", 10002, "root"},
+
+		"kube-master": {
+			{"120.77.2.33", 10002, "root"},
 		},
 		"dev":  {{"47.106.124.124", 10002, "root"}},
 		"test": {{"39.108.235.76", 10002, "root"}},
@@ -235,8 +233,18 @@ func main() {
 		panic(err)
 	}
 
-	/*for _, vps := range HOSTS[env] {
+	for _, vps := range HOSTS["kube-master"] {
+		cmd := fmt.Sprintf("scp -P %d %s %s@%s:~/%s.yml", vps.Port, yamlFile, vps.User, vps.Host, projectName)
+		err = RunCommand(cmd)
+		if err != nil {
+			panic(err)
+		}
 
-	}*/
+		kubeCmd := fmt.Sprintf("kubectl apply -f ~/%s.yml", projectName)
+		err = RunCommandsAtHost(
+			vps.User,
+			fmt.Sprintf("%s:%d", vps.Host, vps.Port),
+			kubeCmd)
+	}
 
 }
