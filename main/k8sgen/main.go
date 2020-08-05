@@ -20,6 +20,7 @@ var (
 	DOCKER_REGISTRY = "dk.livedev.shika2019.com:9443"
 	DOCKER_USERNAME = "kavin"
 	DOCKER_PASSWORD = "f2BYgWtodbbKQZ6K8G4jbRFP"
+	GOPRIVATE       = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
 
 	HOSTS = map[string][]Vps{
 		"prod2": {
@@ -51,7 +52,7 @@ func buildGoProject(projectDir string, buildTarget string, gitlabHost string) er
 
 	err = SetupEnvs(map[string]string{
 		"GOPROXY":     "goproxy.io,direct",
-		"GOPRIVATE":   fmt.Sprintf("%s/*", gitlabHost),
+		"GOPRIVATE":   GOPRIVATE,
 		"CGO_ENABLED": "0",
 		"GO111MODULE": "on",
 		"GOOS":        "linux",
@@ -215,7 +216,7 @@ func main() {
 
 	_ = os.Remove(execBuildTarget)
 
-	configFile := filepath.Join(projectDir, fmt.Sprintf("main/conf_%s.json", env))
+	configFile := filepath.Join(projectDir, fmt.Sprintf("main/%s.json", env))
 
 	yamlFile := filepath.Join(projectDir, fmt.Sprintf("k8s_%s.yml", env))
 	yamlContent, err := generateK8sYaml(configFile, dockerImageTarget)
