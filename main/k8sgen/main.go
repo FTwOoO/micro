@@ -16,11 +16,11 @@ type Vps struct {
 }
 
 var (
-	GITLAB_ADDR           = "gitlab.livedev.shika2019.com"
-	DOCKER_REGISTRY       = "dk.livedev.shika2019.com:9443"
-	DOCKER_USERNAME       = "kavin"
-	DOCKER_PASSWORD       = "f2BYgWtodbbKQZ6K8G4jbRFP"
-	K8sDOCKER_PULL_SECRET = "docker-gitlab"
+	GITLAB_ADDR           = "github.com"
+	DOCKER_REGISTRY       = "docker.pkg.github.com"
+	DOCKER_USERNAME       = "FTwOoO"
+	DOCKER_PASSWORD       = "f3df9275a3931f4fc72c11f0bcaef5f1fa8e7364"
+	K8sDOCKER_PULL_SECRET = "docker-github"
 	GOPRIVATE             = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
 
 	HOSTS = map[string][]Vps{
@@ -201,7 +201,8 @@ func main() {
 		panic(err)
 	}
 
-	dockerImageTarget := fmt.Sprintf("%s/go/%s%s:%s", DOCKER_REGISTRY, projectName, env, projectGitVersion)
+	dockerImageTarget := fmt.Sprintf(`docker.pkg.github.com/rexue2019/%s/%s-%s:%s`, projectName, projectName, env, projectGitVersion)
+	//dockerImageTarget := fmt.Sprintf("%s/go/%s%s:%s", DOCKER_REGISTRY, projectName, env, projectGitVersion)
 
 	dockerFileTemplatePath := filepath.Join(projectDir, "Dockerfile_tpl")
 	tempDockerfile := filepath.Join(projectDir, "Dockerfile_"+env)
