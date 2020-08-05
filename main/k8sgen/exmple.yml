@@ -47,3 +47,5 @@ spec:
           env:
             - name: MESSAGE
               value: I just deployed this on Kubernetes!
+      imagePullSecrets:
+        - name: regcred

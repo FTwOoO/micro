@@ -52,6 +52,8 @@ spec:
           image: {{ .imageUrl }}
           ports:
             - containerPort: 8080
+      imagePullSecrets:
+        - name: {{ .k8sDockerPullSecret }}
 `
 
 func writeWithTpl(tpl string, tplArgv map[string]interface{}) string {
@@ -73,10 +75,11 @@ func generateK8sYaml(configFile string, imageUrl string) (string, error) {
 	}
 
 	cf := map[string]interface{}{
-		"serviceName":    configPointer.Name,
-		"httpHort":       configPointer.GetHttp().Route.Host,
-		"httpPathPrefix": configPointer.GetHttp().Route.PathPrefix[0],
-		"imageUrl":       imageUrl,
+		"serviceName":         configPointer.Name,
+		"httpHort":            configPointer.GetHttp().Route.Host,
+		"httpPathPrefix":      configPointer.GetHttp().Route.PathPrefix[0],
+		"imageUrl":            imageUrl,
+		"k8sDockerPullSecret": K8sDOCKER_PULL_SECRET,
 	}
 
 	return writeWithTpl(getUserIdFuncTpl, cf), nil

@@ -16,11 +16,12 @@ type Vps struct {
 }
 
 var (
-	GITLAB_ADDR     = "gitlab.livedev.shika2019.com"
-	DOCKER_REGISTRY = "dk.livedev.shika2019.com:9443"
-	DOCKER_USERNAME = "kavin"
-	DOCKER_PASSWORD = "f2BYgWtodbbKQZ6K8G4jbRFP"
-	GOPRIVATE       = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
+	GITLAB_ADDR           = "gitlab.livedev.shika2019.com"
+	DOCKER_REGISTRY       = "dk.livedev.shika2019.com:9443"
+	DOCKER_USERNAME       = "kavin"
+	DOCKER_PASSWORD       = "f2BYgWtodbbKQZ6K8G4jbRFP"
+	K8sDOCKER_PULL_SECRET = "docker-gitlab"
+	GOPRIVATE             = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
 
 	HOSTS = map[string][]Vps{
 		"prod2": {
@@ -100,7 +101,7 @@ func generateDockerFile(dockerFileTemplatePath string, tempDockerFile string, pr
 		return err
 	}
 
-	f, err := os.OpenFile(tempDockerFile, os.O_CREATE|os.O_RDWR, 0666)
+	f, err := os.OpenFile(tempDockerFile, os.O_CREATE|os.O_RDWR|os.O_TRUNC, 0666)
 	if err != nil {
 		return err
 	}

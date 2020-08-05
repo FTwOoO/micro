@@ -7,6 +7,7 @@ require (
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/onsi/ginkgo v1.14.0 // indirect
 	github.com/prometheus/client_golang v1.5.1
+	github.com/rexue2019/k8sdemo v0.0.3 // indirect
 	github.com/rexue2019/util v1.0.15
 	go.uber.org/atomic v1.5.0
 	golang.org/x/crypto v0.0.0-20191108234033-bd318be0434a
