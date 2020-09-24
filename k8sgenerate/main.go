@@ -2,7 +2,7 @@ package main
 
 import (
 	"bytes"
-	"github.com/rexue2019/micro/cfg"
+	"github.com/FTwOoO/micro/cfg"
 	"io/ioutil"
 	"os"
 	"path/filepath"

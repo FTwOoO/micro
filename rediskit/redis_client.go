@@ -2,10 +2,10 @@ package rediskit
 
 import (
 	"fmt"
+	"github.com/FTwOoO/micro/cfg"
+	"github.com/FTwOoO/util/errorkit"
+	"github.com/FTwOoO/util/logging"
 	"github.com/go-redis/redis"
-	"github.com/rexue2019/micro/cfg"
-	"github.com/rexue2019/util/errorkit"
-	"github.com/rexue2019/util/logging"
 )
 
 type RedisClient struct {

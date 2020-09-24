@@ -21,7 +21,7 @@ var (
 	DOCKER_USERNAME       = "FTwOoO"
 	DOCKER_PASSWORD       = "f3df9275a3931f4fc72c11f0bcaef5f1fa8e7364"
 	K8sDOCKER_PULL_SECRET = "docker-github"
-	GOPRIVATE             = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/rexue2019/*`
+	GOPRIVATE             = `github.com/FTwOoO/im_grpc,github.com/FTwOoO/im_common,gitlab.livedev.shika2019.com/*,github.com/FTwOoO/*`
 
 	HOSTS = map[string][]Vps{
 
@@ -199,7 +199,7 @@ func main() {
 		panic(err)
 	}
 
-	dockerImageTarget := fmt.Sprintf(`docker.pkg.github.com/rexue2019/%s/%s-%s:%s`, projectName, projectName, env, projectGitVersion)
+	dockerImageTarget := fmt.Sprintf(`docker.pkg.github.com/FTwOoO/%s/%s-%s:%s`, projectName, projectName, env, projectGitVersion)
 	//dockerImageTarget := fmt.Sprintf("%s/go/%s%s:%s", DOCKER_REGISTRY, projectName, env, projectGitVersion)
 
 	dockerFileTemplatePath := filepath.Join(projectDir, "Dockerfile_tpl")

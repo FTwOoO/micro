@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/rexue2019/micro/rpc"
+	"github.com/FTwOoO/micro/rpc"
 	"io/ioutil"
 	"os"
 	"os/exec"

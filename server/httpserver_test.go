@@ -2,7 +2,7 @@ package server
 
 import (
 	"context"
-	"github.com/rexue2019/micro/cfg"
+	"github.com/FTwOoO/micro/cfg"
 	"testing"
 )
 

@@ -2,8 +2,8 @@ package server
 
 import (
 	"context"
-	"github.com/rexue2019/micro/cfg"
-	"github.com/rexue2019/util/logging"
+	"github.com/FTwOoO/micro/cfg"
+	"github.com/FTwOoO/util/logging"
 	"os"
 	"os/signal"
 	"syscall"
