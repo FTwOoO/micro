@@ -1,12 +1,13 @@
 package orm
 
 import (
+	"github.com/FTwOoO/micro/thirdparty/jaeger/gormtracing"
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"sacf-rpcx/common/constant"
-	"sacf-rpcx/common/jaeger/gormtracing"
 )
+
+var g_db *gorm.DB
 
 func InitOrm(dbName string, dbSource string, ormLog bool, enableTracing bool) error {
 	if dbName == "mysql" {
@@ -27,7 +28,7 @@ func InitOrm(dbName string, dbSource string, ormLog bool, enableTracing bool) er
 				return err
 			}
 		}
-		constant.Global_DB = db
+		g_db = db
 	}
 	return nil
 }

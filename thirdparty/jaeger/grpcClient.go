@@ -1,22 +1,21 @@
-package examples
+package jaeger
 
 import (
 	"fmt"
+	pb "github.com/FTwOoO/micro/thirdparty/jaeger/helloworld"
 	"github.com/opentracing-contrib/go-grpc"
 	"github.com/opentracing/opentracing-go"
 	"google.golang.org/grpc"
-	pb "tracingtest/examples/helloworld"
 )
 
-func NewClient(tracer opentracing.Tracer) (pb.GreeterClient, error) {
-	// Set up a connection to the server.
+func NewClient() (pb.GreeterClient, error) {
 	conn, err := grpc.Dial(
 		addr,
 		grpc.WithInsecure(),
 		grpc.WithUnaryInterceptor(
-			otgrpc.OpenTracingClientInterceptor(tracer)),
+			otgrpc.OpenTracingClientInterceptor(opentracing.GlobalTracer())),
 		grpc.WithStreamInterceptor(
-			otgrpc.OpenTracingStreamClientInterceptor(tracer)),
+			otgrpc.OpenTracingStreamClientInterceptor(opentracing.GlobalTracer())),
 	)
 	if err != nil {
 		return nil, fmt.Errorf("Error connecting to service: %v", err)
