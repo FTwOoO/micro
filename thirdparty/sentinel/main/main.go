@@ -16,17 +16,15 @@ package main
 
 import (
 	"fmt"
-	"github.com/aliyun/aliyun-ahas-go-sdk/config"
+	sentinel2 "github.com/FTwOoO/micro/thirdparty/sentinel"
 	"log"
 	"math/rand"
-	"os"
 	"time"
 
 	sentinel "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/alibaba/sentinel-golang/core/flow"
 	"github.com/alibaba/sentinel-golang/util"
-	ahas "github.com/aliyun/aliyun-ahas-go-sdk"
 )
 
 func main() {
@@ -38,10 +36,8 @@ func main() {
 	//	log.Fatal(err)
 	//}
 
-	os.Setenv(config.LicenseEnvKey, "7bac187365984241afadce74133c9820")
-	os.Setenv(config.EnvironmentEnvKey, config.DeployEnvProd)
+	err := sentinel2.AHASInit("7bac187365984241afadce74133c9820", "go-test-demo")
 
-	err := ahas.InitAhasDefault()
 	if err != nil {
 		log.Fatalf("Failed to init AHAS: %+v", err)
 	}
