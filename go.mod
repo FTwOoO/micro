@@ -5,8 +5,12 @@ go 1.14
 require (
 	github.com/FTwOoO/util v1.0.18
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
+	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
+	github.com/alibaba/sentinel-golang v1.0.0
+	github.com/aliyun/aliyun-ahas-go-sdk v1.0.3
 	github.com/fatih/structtag v1.2.0
 	github.com/gin-gonic/gin v1.6.3
+	github.com/go-ole/go-ole v1.2.4 // indirect
 	github.com/go-redis/redis v6.15.6+incompatible
 	github.com/go-sql-driver/mysql v1.5.0
 	github.com/golang/protobuf v1.4.3
@@ -18,7 +22,6 @@ require (
 	github.com/opentracing-contrib/go-grpc v0.0.0-20200813121455-4a6760c71486
 	github.com/opentracing-contrib/go-stdlib v1.0.0
 	github.com/opentracing/opentracing-go v1.2.0
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/client_golang v1.5.1
 	github.com/streadway/amqp v1.0.0
 	github.com/uber/jaeger-client-go v2.25.0+incompatible
@@ -28,7 +31,9 @@ require (
 	golang.org/x/net v0.0.0-20201026091529-146b70c837a4
 	google.golang.org/genproto v0.0.0-20201201144952-b05cb90ed32e // indirect
 	google.golang.org/grpc v1.33.2
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gorm.io/driver/mysql v1.0.3
 	gorm.io/gorm v1.20.8
-
 )
+
+replace github.com/aliyun/aliyun-ahas-go-sdk v1.0.3 => ./thirdparty/sentinel/ahas-go-sdk
