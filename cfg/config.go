@@ -17,4 +17,5 @@ type Configuration interface {
 	GetConsul() *ConsulConfig
 	GetMongoDb() *MongoDBConfig
 	GetRabbitMq() *RabbitMqConfig
+	GetAHASSentinelConfig() *AHASSentinelConfig
 }

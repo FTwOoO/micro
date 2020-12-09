@@ -19,6 +19,7 @@ type HTTPServer struct {
 	start         atomic.Bool
 	listenAddr    string
 	handleConnect http.HandlerFunc
+	middlewares   []HttpMiddleware
 }
 
 func (this *HTTPServer) WaitHTTPServiceUp() (addr string) {
@@ -55,11 +56,20 @@ func (this *HTTPServer) SetupConnectHandleFunc(f http.HandlerFunc) {
 	this.handleConnect = f
 }
 
+func (this *HTTPServer) AddMiddleware(f HttpMiddleware) {
+	this.middlewares = append(this.middlewares, f)
+}
+
 func (this *HTTPServer) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 	if req.Method == "CONNECT" && this.handleConnect != nil {
 		this.handleConnect(w, req)
 	} else {
-		http.DefaultServeMux.ServeHTTP(w, req)
+		h := http.DefaultServeMux.ServeHTTP
+		for i := len(this.middlewares) - 1; i >= 0; i-- {
+			mf := this.middlewares[i]
+			h = mf(h)
+		}
+		h(w, req)
 	}
 }
 

@@ -3,25 +3,26 @@ package cfg
 var _ Configuration = &ConfigurationImp{}
 
 type ConfigurationImp struct {
-	LogLevel      string
-	Name          string
-	Version       string
-	Environment   Environment
-	Redis         RedisConfig
-	PostGresDB    PostGresDBConfig
-	Consul        ConsulConfig
-	Etcd          EtcdConfig
-	Nsq           NsqConfig
-	Websocket     WebsocketConfig
-	Grpc          GrpcConfig
-	HTTP          HTTPConfig
-	MongoDB       MongoDBConfig
-	Apisix        ApisixConfig
-	ServiceCenter ServiceCenterConfig
-	InfluxDb      InfluxDbConfig
-	Nacos         NacosConfig
-	RabbitMq      RabbitMqConfig
- }
+	LogLevel           string
+	Name               string
+	Version            string
+	Environment        Environment
+	Redis              RedisConfig
+	PostGresDB         PostGresDBConfig
+	Consul             ConsulConfig
+	Etcd               EtcdConfig
+	Nsq                NsqConfig
+	Websocket          WebsocketConfig
+	Grpc               GrpcConfig
+	HTTP               HTTPConfig
+	MongoDB            MongoDBConfig
+	Apisix             ApisixConfig
+	ServiceCenter      ServiceCenterConfig
+	InfluxDb           InfluxDbConfig
+	Nacos              NacosConfig
+	RabbitMq           RabbitMqConfig
+	AHASSentinelConfig AHASSentinelConfig
+}
 
 func (this *ConfigurationImp) GetName() string {
 	return this.Name
@@ -104,11 +105,18 @@ func (this *ConfigurationImp) GetMongoDb() *MongoDBConfig {
 	return &this.MongoDB
 }
 
-func  (this *ConfigurationImp) GetRabbitMq() *RabbitMqConfig {
+func (this *ConfigurationImp) GetRabbitMq() *RabbitMqConfig {
 	if !this.RabbitMq.IsValid() {
 		return nil
 	}
 	return &this.RabbitMq
+}
+
+func (this *ConfigurationImp) GetAHASSentinelConfig() *AHASSentinelConfig {
+	if !this.AHASSentinelConfig.IsValid() {
+		return nil
+	}
+	return &this.AHASSentinelConfig
 }
 
 type InfluxDbConfig struct {
@@ -265,6 +273,19 @@ type RabbitMqConfig struct {
 
 func (this *RabbitMqConfig) IsValid() bool {
 	if len(this.Addr) == 0 {
+		return false
+	}
+
+	return true
+}
+
+type AHASSentinelConfig struct {
+	LicenseKey  string
+	ServiceName string
+}
+
+func (this *AHASSentinelConfig) IsValid() bool {
+	if len(this.LicenseKey) == 0 || len(this.ServiceName) == 0 {
 		return false
 	}
 

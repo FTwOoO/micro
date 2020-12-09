@@ -19,6 +19,10 @@ type MicroContext struct {
 
 func startHttpServer(ctx context.Context, configPointer cfg.Configuration) *HTTPServer {
 	httpServer := NewHTTPServer(ctx, configPointer.GetEnv(), configPointer)
+	if configPointer.GetAHASSentinelConfig() != nil {
+		cf := configPointer.GetAHASSentinelConfig()
+		httpServer.AddMiddleware(AHASMiddleware(cf.LicenseKey, cf.ServiceName))
+	}
 	go httpServer.Start()
 	addr := httpServer.WaitHTTPServiceUp()
 	configPointer.GetHttp().Addr = addr

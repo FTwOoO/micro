@@ -2,19 +2,10 @@ package server
 
 import (
 	"net"
-	"os"
 	"strings"
 )
 
 func InternalIP() string {
-	intranet_ip := os.Getenv("INTRANET_IP")
-	if intranet_ip != "" {
-		ip := net.ParseIP(intranet_ip)
-		if ip != nil {
-			return ip.String()
-		}
-	}
-
 	ifaces, err := net.Interfaces()
 	if err != nil {
 		return ""
