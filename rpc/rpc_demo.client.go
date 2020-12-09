@@ -6,6 +6,8 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"github.com/opentracing-contrib/go-stdlib/nethttp"
+	"github.com/opentracing/opentracing-go"
 	"io"
 	"io/ioutil"
 	"net/http"
@@ -24,8 +26,8 @@ func NewDemoSeviceClient(c *http.Client, endpoint string) *DemoSeviceClient {
 	}
 }
 
-func (c *DemoSeviceClient) doPostJsonAndUnpackRespJson(URL string, header http.Header, params interface{}, respObjPointer interface{}) (err error) {
-	data, err := c.doPostJSON(URL, header, params)
+func (c *DemoSeviceClient) doPostJsonAndUnpackRespJson(ctx context.Context, URL string, header http.Header, params interface{}, respObjPointer interface{}) (err error) {
+	data, err := c.doPostJSON(ctx, URL, header, params)
 	if err != nil {
 		return
 	}
@@ -34,7 +36,7 @@ func (c *DemoSeviceClient) doPostJsonAndUnpackRespJson(URL string, header http.H
 	return
 }
 
-func (c *DemoSeviceClient) doPostJSON(URL string, header http.Header, params interface{}) ([]byte, error) {
+func (c *DemoSeviceClient) doPostJSON(ctx context.Context, URL string, header http.Header, params interface{}) ([]byte, error) {
 	var req *http.Request
 	var resp *http.Response
 	var err error
@@ -70,6 +72,11 @@ func (c *DemoSeviceClient) doPostJSON(URL string, header http.Header, params int
 	}
 	req.Header.Set("Content-Type", "application/json")
 
+	req = req.WithContext(ctx)
+	req, ht := nethttp.TraceRequest(opentracing.GlobalTracer(), req)
+	defer ht.Finish()
+
+	c.Client = &http.Client{Transport: &nethttp.Transport{}}
 	resp, err = c.Do(req)
 	if err != nil {
 		return nil, err
@@ -110,12 +117,12 @@ func (this *DemoSeviceClient) Hello(ctx context.Context, req *HelloRequest) (res
 	httpResp := &demoSeviceHTTPResp{
 		Data: resp,
 	}
-	err = this.doPostJsonAndUnpackRespJson(url, nil, req, httpResp)
+	err = this.doPostJsonAndUnpackRespJson(ctx, url, nil, req, httpResp)
 	return
 }
 
 func (this *DemoSeviceClient) HelloNoReponse(ctx context.Context, req *HelloRequest) (err error) {
 	url := fmt.Sprintf("http://%s%s", this.endPoint, "/demoSevice/helloNoReponse")
-	_, err = this.doPostJSON(url, nil, req)
+	_, err = this.doPostJSON(ctx, url, nil, req)
 	return
 }

@@ -145,8 +145,8 @@ func New{{ .structName }}(c *http.Client, endpoint string) *{{ .structName }} {
 	}
 }
 
-func (c *{{ .structName }}) doPostJsonAndUnpackRespJson(URL string, header http.Header, params interface{}, respObjPointer interface{}) (err error) {
-	data, err := c.doPostJSON(URL, header, params)
+func (c *{{ .structName }}) doPostJsonAndUnpackRespJson(ctx context.Context, URL string, header http.Header, params interface{}, respObjPointer interface{}) (err error) {
+	data, err := c.doPostJSON(ctx, URL, header, params)
 	if err != nil {
 		return
 	}
@@ -155,7 +155,7 @@ func (c *{{ .structName }}) doPostJsonAndUnpackRespJson(URL string, header http.
 	return
 }
 
-func (c *{{ .structName }}) doPostJSON(URL string, header http.Header, params interface{}) ([]byte, error) {
+func (c *{{ .structName }}) doPostJSON(ctx context.Context, URL string, header http.Header, params interface{}) ([]byte, error) {
 	var req *http.Request
 	var resp *http.Response
 	var err error
@@ -191,6 +191,11 @@ func (c *{{ .structName }}) doPostJSON(URL string, header http.Header, params in
 	}
 	req.Header.Set("Content-Type", "application/json")
 
+	req = req.WithContext(ctx)
+    req, ht := nethttp.TraceRequest(opentracing.GlobalTracer(), req)
+    defer ht.Finish()
+
+	c.Client = &http.Client{Transport: &nethttp.Transport{}}
 	resp, err = c.Do(req)
 	if err != nil {
 		return nil, err
@@ -232,13 +237,13 @@ func (this *{{ .structName }}) {{ .rpcMethodName }}(ctx context.Context, req *{{
 	httpResp := &{{ .serviceName }}HTTPResp{
 		Data: resp,
 	}
-	err = this.doPostJsonAndUnpackRespJson(url, nil, req, httpResp)
+	err = this.doPostJsonAndUnpackRespJson(ctx, url, nil, req, httpResp)
 	return
 }`
 
 const RpcClientMethodForNoRespTpl = `
 func (this *{{ .structName }}) {{ .rpcMethodName }}(ctx context.Context, req *{{ .rpcRequestStructName }}) (err error) {
 	url := fmt.Sprintf("http://%s%s", this.endPoint, "{{ .httpMethodName }}")
-	_, err = this.doPostJSON(url, nil, req)
+	_, err = this.doPostJSON(ctx, url, nil, req)
 	return
 }`

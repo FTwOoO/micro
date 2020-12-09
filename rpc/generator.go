@@ -226,6 +226,8 @@ func Generate(pkg string, filename string, src []byte, srcOut io.Writer, serverW
 	"io/ioutil"
 	"net/http"
 	"strings"
+	"github.com/opentracing-contrib/go-stdlib/nethttp"
+	"github.com/opentracing/opentracing-go"
 	)`, pkg)
 	_, err = clientW.Write([]byte(out + "\n"))
 	if err != nil {
