@@ -6,6 +6,8 @@ import (
 	sentinel_api "github.com/alibaba/sentinel-golang/api"
 	"github.com/alibaba/sentinel-golang/core/base"
 	"github.com/alibaba/sentinel-golang/core/flow"
+	"github.com/opentracing-contrib/go-stdlib/nethttp"
+	"github.com/opentracing/opentracing-go"
 	"net/http"
 )
 
@@ -33,7 +35,7 @@ func AHASMiddleware(licenseKey string, serviceName string) HttpMiddleware {
 
 	return func(handlerFunc http.HandlerFunc) http.HandlerFunc {
 		return func(writer http.ResponseWriter, request *http.Request) {
-			e, err := sentinel_api.Entry(resourceName, sentinel_api.WithTrafficType(base.Inbound))
+			e, err := sentinel_api.Entry(resourceName, sentinel_api.WithTrafficType(base.Inbound), sentinel_api.WithResourceType(base.ResTypeWeb))
 			if err != nil {
 				writer.WriteHeader(http.StatusServiceUnavailable)
 			} else {
@@ -41,5 +43,16 @@ func AHASMiddleware(licenseKey string, serviceName string) HttpMiddleware {
 				handlerFunc(writer, request)
 			}
 		}
+	}
+}
+
+func OpentracingMiddleware() HttpMiddleware {
+	return func(handlerFunc http.HandlerFunc) http.HandlerFunc {
+		return nethttp.MiddlewareFunc(
+			opentracing.GlobalTracer(),
+			handlerFunc,
+			nethttp.OperationNameFunc(func(r *http.Request) string {
+				return r.URL.Path
+			}))
 	}
 }

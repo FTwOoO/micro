@@ -22,6 +22,7 @@ type ConfigurationImp struct {
 	Nacos              NacosConfig
 	RabbitMq           RabbitMqConfig
 	AHASSentinelConfig AHASSentinelConfig
+	JaegerConfig       JaegerConfig
 }
 
 func (this *ConfigurationImp) GetName() string {
@@ -117,6 +118,13 @@ func (this *ConfigurationImp) GetAHASSentinelConfig() *AHASSentinelConfig {
 		return nil
 	}
 	return &this.AHASSentinelConfig
+}
+
+func (this *ConfigurationImp) GetJaegerConfig() *JaegerConfig {
+	if !this.JaegerConfig.IsValid() {
+		return nil
+	}
+	return &this.JaegerConfig
 }
 
 type InfluxDbConfig struct {
@@ -286,6 +294,29 @@ type AHASSentinelConfig struct {
 
 func (this *AHASSentinelConfig) IsValid() bool {
 	if len(this.LicenseKey) == 0 || len(this.ServiceName) == 0 {
+		return false
+	}
+
+	return true
+}
+
+type JaegerConfig struct {
+	/*
+	  "jaeger_enable": true,
+	  "jaeger_sample_type": "const",
+	  "jaeger_sample_param": 1,
+	  "jaeger_agent_addr": "",
+	  "jaeger_collector_endpoint_addr": "http://127.0.0.1:14268/api/traces",
+
+	*/
+	SampleType            string
+	SampleParam           float64
+	AgentAddr             string
+	CollectorEndpointAddr string
+}
+
+func (this *JaegerConfig) IsValid() bool {
+	if len(this.AgentAddr) == 0 || len(this.CollectorEndpointAddr) == 0 {
 		return false
 	}
 

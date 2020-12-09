@@ -18,4 +18,5 @@ type Configuration interface {
 	GetMongoDb() *MongoDBConfig
 	GetRabbitMq() *RabbitMqConfig
 	GetAHASSentinelConfig() *AHASSentinelConfig
+	GetJaegerConfig() *JaegerConfig
 }

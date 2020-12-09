@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"github.com/FTwOoO/micro/cfg"
+	"github.com/FTwOoO/micro/thirdparty/jaeger"
 	"github.com/FTwOoO/util/logging"
 	"os"
 	"os/signal"
@@ -19,6 +20,16 @@ type MicroContext struct {
 
 func startHttpServer(ctx context.Context, configPointer cfg.Configuration) *HTTPServer {
 	httpServer := NewHTTPServer(ctx, configPointer.GetEnv(), configPointer)
+
+	if configPointer.GetJaegerConfig().IsValid() {
+		cf := configPointer.GetJaegerConfig()
+		_, err := jaeger.InitJaeger(configPointer.GetName(), cf.SampleType, cf.SampleParam, cf.AgentAddr, cf.CollectorEndpointAddr, nil)
+		if err != nil {
+			logging.Log.FatalError(err)
+		}
+		httpServer.AddMiddleware(OpentracingMiddleware())
+	}
+
 	if configPointer.GetAHASSentinelConfig() != nil {
 		cf := configPointer.GetAHASSentinelConfig()
 		httpServer.AddMiddleware(AHASMiddleware(cf.LicenseKey, cf.ServiceName))
