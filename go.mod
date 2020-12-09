@@ -7,7 +7,7 @@ require (
 	github.com/HdrHistogram/hdrhistogram-go v1.0.1 // indirect
 	github.com/StackExchange/wmi v0.0.0-20190523213315-cbe66965904d // indirect
 	github.com/alibaba/sentinel-golang v1.0.0
-	github.com/aliyun/aliyun-ahas-go-sdk v1.0.3
+	github.com/aliyun/aliyun-ahas-go-sdk v1.0.4
 	github.com/fatih/structtag v1.2.0
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-ole/go-ole v1.2.4 // indirect
@@ -36,4 +36,4 @@ require (
 	gorm.io/gorm v1.20.8
 )
 
-replace github.com/aliyun/aliyun-ahas-go-sdk v1.0.3 => ./thirdparty/sentinel/ahas-go-sdk
+replace github.com/aliyun/aliyun-ahas-go-sdk v1.0.4 => ./thirdparty/sentinel/ahas-go-sdk
